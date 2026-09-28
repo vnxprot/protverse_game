@@ -91,6 +91,8 @@ export type SaveData = {
   sceneIndex: number
   choices: ChoiceRecord[]
   traits: Record<Trait, number>
+  meteorChoice?: 'step-out' | 'write' | 'ask'
+  constellationOrder?: number[]
   updatedAt: string
 }
 
@@ -99,6 +101,7 @@ export const initialSave: SaveData = {
   sceneIndex: 0,
   choices: [],
   traits: { courage: 0, clarity: 0, balance: 0 },
+  constellationOrder: [],
   updatedAt: new Date().toISOString(),
 }
 
@@ -116,6 +119,22 @@ export function getEnding(save: SaveData) {
     title: 'Ngôi sao còn trong sổ',
     text: 'Có những điều Prot chưa nói được trong mùa này. Cậu cất ngôi sao giấy vào sổ, mang theo cả niềm vui lẫn sự tiếc nuối. Một hành trình khác bắt đầu từ việc hiểu mình hơn.',
   }
+}
+
+export function getSceneNarration(save: SaveData): string {
+  const scene = scenes[Math.min(save.sceneIndex, scenes.length - 1)]
+  const first = save.choices.find(choice => choice.sceneId === 'paper-star')?.choiceIndex
+  const invitation = save.choices.find(choice => choice.sceneId === 'rain-cafe')?.choiceIndex
+  const quiet = save.choices.find(choice => choice.sceneId === 'other-planets')?.choiceIndex
+  if (scene.id === 'rain-cafe' && first === 0) return 'Sau câu chuyện về ngôi sao giấy, Thảo và Prot nói chuyện thêm vài lần. Prot muốn mời cô đi cà phê. Điện thoại trong tay cậu sáng lên, rồi lại tối. Cậu muốn lời mời ấy thật rõ ràng.'
+  if (scene.id === 'rain-cafe' && first === 2) return 'Prot vẫn nhớ nụ cười ở tiệm sách, dù hôm ấy cậu chỉ cất ngôi sao đi. Lần này, trước màn hình điện thoại, cậu tự hỏi mình có muốn mở thêm một cánh cửa không.'
+  if (scene.id === 'other-planets' && invitation === 0) return 'Prot đã gửi một lời mời rõ ràng. Tối nay Thảo bận việc riêng, chưa có tín hiệu mới. Trên bàn cậu còn cuốn sách chưa đọc và vé xem triển lãm cuối tuần.'
+  if (scene.id === 'other-planets' && invitation === 2) return 'Lời mời cà phê vẫn nằm trong suy nghĩ Prot. Tối nay không có tin nhắn mới. Trên bàn cậu còn cuốn sách chưa đọc và vé xem triển lãm cuối tuần.'
+  if (scene.id === 'the-invitation' && quiet === 0) return 'Sau tối ở triển lãm, Prot có thêm một điều để kể. Thảo hỏi cậu có muốn ghé quán nhỏ cùng cô không. Trong cuộc gặp, cả hai nói về những dự định riêng cho năm tới.'
+  if (scene.id === 'the-invitation' && quiet === 2) return 'Những dòng viết trong sổ giúp Prot nhận ra mình đang mong đợi gì. Rồi Thảo hỏi cậu có muốn ghé quán nhỏ cùng cô không. Cả hai nói về những dự định riêng cho năm tới.'
+  if (scene.id === 'honest-sky' && save.meteorChoice === 'step-out') return 'Prot đã đi qua một tối chỉ có mình, và biết cậu vẫn có thể thấy vui ngoài quỹ đạo của Thảo. Khi gặp lại, cậu muốn nói thật mà không đặt lên cô một lời hứa phải đáp lại.'
+  if (scene.id === 'honest-sky' && save.meteorChoice === 'write') return 'Prot đã đọc lại những dòng mình viết và hiểu nỗi nhớ rõ hơn. Khi gặp Thảo, cậu muốn nói thật, đồng thời để cô tự chọn cách trả lời.'
+  return scene.narration
 }
 
 export function isSaveData(value: unknown): value is SaveData {
