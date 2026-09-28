@@ -17,6 +17,7 @@ export type StoryScene = {
   weather: string
   narration: string
   task: string
+  fragments: [string, string, string]
   choices: StoryChoice[]
   autoChoice: number
 }
@@ -26,6 +27,7 @@ export const scenes: StoryScene[] = [
     id: 'paper-star', day: 'Ngày 01', title: 'Ngôi sao bằng giấy', place: 'Tiệm sách cuối phố', weather: 'Một chiều hơi nhiều mây',
     narration: 'Prot gặp Phương Thảo trước kệ sách cũ. Một ngôi sao giấy rơi khỏi cuốn sổ của cậu. Thảo nhặt lên và bật cười: “Cậu vẫn gấp mấy thứ này à?”',
     task: 'Đặt ngôi sao vào đúng vị trí trong câu chuyện.',
+    fragments: ['Góc giấy', 'Mảnh sao', 'Lời chào'],
     choices: [
       { label: 'Kể vì sao Prot gấp sao', detail: 'Một câu chuyện nhỏ, thật lòng.', thought: 'Prot kể về những tối muốn giữ lại một điều đẹp đẽ. Cậu nói chậm, nhưng lần này không giấu mình.', effect: { courage: 2, clarity: 1 } },
       { label: 'Hỏi Thảo đang đọc gì', detail: 'Để câu chuyện mở từ phía cô ấy.', thought: 'Thảo kể về cuốn sách đang cầm. Prot lắng nghe và thấy cuộc gặp dễ chịu hơn mình tưởng.', effect: { balance: 2, clarity: 1 } },
@@ -36,6 +38,7 @@ export const scenes: StoryScene[] = [
     id: 'rain-cafe', day: 'Ngày 04', title: 'Hộp sữa sau cơn mưa', place: 'Con đường đến quán cà phê', weather: 'Mưa phùn, đèn phố lên sớm',
     narration: 'Hai người đã nói chuyện thêm vài lần. Prot muốn mời Thảo đi cà phê. Điện thoại trong tay cậu sáng lên, rồi lại tối. Con đường giấy trước mặt chia thành ba nhánh.',
     task: 'Chọn cách Prot ngỏ lời.',
+    fragments: ['Hạt mưa', 'Ánh đèn', 'Tấm thiệp'],
     choices: [
       { label: 'Mời rõ ràng, để Thảo chọn', detail: 'Một lời mời cụ thể, thoải mái từ chối.', thought: 'Prot gửi lời mời với ngày giờ rõ ràng. Cậu đặt điện thoại xuống và tiếp tục buổi tối của mình.', effect: { courage: 2, clarity: 2, balance: 1 } },
       { label: 'Gửi một câu bóng gió', detail: 'Mở cửa nhưng chưa dám bước tới.', thought: 'Tin nhắn được gửi. Prot nhận ra cả hai có thể hiểu nó theo hai cách khác nhau.', effect: { courage: 1 } },
@@ -46,6 +49,7 @@ export const scenes: StoryScene[] = [
     id: 'other-planets', day: 'Ngày 07', title: 'Một tối không có tin nhắn', place: 'Căn phòng của Prot', weather: 'Bầu trời trong, rất yên',
     narration: 'Một buổi tối trôi qua mà Thảo bận việc riêng. Không có tín hiệu mới trên quỹ đạo của cô ấy. Trên bàn Prot còn một cuốn sách chưa đọc và vé xem triển lãm cuối tuần.',
     task: 'Quyết định Prot sẽ làm gì với khoảng lặng.',
+    fragments: ['Cuốn sách', 'Tấm vé', 'Ngôi sao'],
     choices: [
       { label: 'Ra ngoài xem triển lãm', detail: 'Một buổi tối vẫn thuộc về Prot.', thought: 'Ở triển lãm, Prot chụp một bức tranh mình thích. Tối đó cậu thấy nhẹ hơn, dù điện thoại vẫn yên.', effect: { balance: 3 } },
       { label: 'Nhắn một lần để hỏi thăm', detail: 'Quan tâm mà không đòi câu trả lời ngay.', thought: 'Prot gửi một lời hỏi thăm ngắn. Sau đó cậu quay về cuốn sách trên bàn.', effect: { clarity: 1, balance: 1 } },
@@ -56,6 +60,7 @@ export const scenes: StoryScene[] = [
     id: 'the-invitation', day: 'Ngày 12', title: 'Phía bên kia cây cầu', place: 'Cầu giấy bên quán nhỏ', weather: 'Nắng qua những tán cây đất nặn',
     narration: 'Thảo chủ động hỏi Prot có muốn ghé một quán nhỏ cùng cô ấy không. Trong buổi gặp, cả hai kể về những điều mình muốn làm năm tới. Prot nhận ra Thảo có những dự định riêng rất rõ ràng.',
     task: 'Chọn điều Prot mang vào cuộc gặp.',
+    fragments: ['Nhịp cầu', 'Chiếc lá', 'Vệt nắng'],
     choices: [
       { label: 'Chia sẻ dự định của Prot', detail: 'Để hai người hiểu nhau hơn.', thought: 'Prot nói về những nơi cậu muốn đi và điều cậu còn đang tìm kiếm. Cuộc trò chuyện trở nên thật hơn.', effect: { courage: 2, clarity: 2 } },
       { label: 'Lắng nghe rồi hỏi thêm', detail: 'Tò mò về thế giới của Thảo.', thought: 'Thảo kể nhiều hơn. Prot nhận ra sự gần gũi bắt đầu bằng việc lắng nghe mà không vội kết luận.', effect: { balance: 2, clarity: 1 } },
@@ -66,6 +71,7 @@ export const scenes: StoryScene[] = [
     id: 'honest-sky', day: 'Ngày 19', title: 'Bầu trời nói thật', place: 'Bậc thềm dưới đèn vàng', weather: 'Đêm mát, có vài ngôi sao',
     narration: 'Những lần gặp khiến Prot quý Thảo hơn. Cậu không muốn đoán mãi. Thảo cũng có quyền nói rõ cô ấy nhìn mối quan hệ này thế nào, dù câu trả lời có thể khác điều Prot mong.',
     task: 'Chọn cách Prot nói về cảm xúc.',
+    fragments: ['Can đảm', 'Rõ ràng', 'Bình thản'],
     choices: [
       { label: 'Nói thật và lắng nghe', detail: 'Không đặt áp lực lên câu trả lời.', thought: 'Prot nói điều mình cảm nhận và để Thảo có thời gian đáp lại. Dù chuyện sẽ đi đâu, cậu đã thành thật.', effect: { courage: 3, clarity: 3, balance: 1 } },
       { label: 'Hỏi về mong muốn của cả hai', detail: 'Bắt đầu bằng một câu hỏi mở.', thought: 'Cuộc nói chuyện dài hơn dự tính. Prot hiểu rằng sự rõ ràng không nhất thiết làm mất đi dịu dàng.', effect: { clarity: 3, balance: 2 } },

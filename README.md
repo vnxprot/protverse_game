@@ -23,7 +23,7 @@ Tất cả dữ liệu trong `game_saves` được bảo vệ theo `auth.uid() =
 ## Nội dung bản đầu
 
 - Bản đồ vũ trụ có Prot và bốn thế giới, với mùa truyện Phương Thảo đang mở.
-- Năm cảnh có lựa chọn, cảm nhận sau mỗi cảnh, chế độ thủ công và tự động.
+- Năm cảnh có mảnh ký ức để chạm nhặt, lựa chọn, cảm nhận sau mỗi cảnh, chế độ thủ công và tự động.
 - Ba cách khép lại mùa truyện dựa trên cách Prot hành động.
 - Dòng thời gian Quá khứ, Hiện tại, Tương lai; nhật ký lựa chọn; giao diện thích ứng iPhone.
 - PWA có thể thêm vào màn hình chính và tiếp tục chơi ngoại tuyến sau lần tải đầu.

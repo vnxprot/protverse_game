@@ -34,6 +34,7 @@ export default function App() {
   const [mode, setMode] = useState<PlayMode>('manual')
   const [selectedPlanet, setSelectedPlanet] = useState<PlanetId>('thao')
   const [save, setSave] = useState<SaveData>(loadLocal)
+  const [found, setFound] = useState<number[]>([])
   const [userId, setUserId] = useState<string | null>(null)
   const [email, setEmail] = useState('')
   const [cloudMessage, setCloudMessage] = useState('')
@@ -42,8 +43,11 @@ export default function App() {
   const finished = save.sceneIndex >= scenes.length
   const latestChoice = save.choices[save.choices.length - 1]
   const revealed = !finished && latestChoice?.sceneId === scene.id ? latestChoice.choiceIndex : null
+  const readyToChoose = found.length === 3 || revealed !== null
 
   useEffect(() => { localStorage.setItem('protverse-save', JSON.stringify(save)) }, [save])
+  useEffect(() => { setFound([]) }, [save.sceneIndex])
+  useEffect(() => { if (mode === 'auto' && page === 'story' && !finished) setFound([0, 1, 2]) }, [mode, page, save.sceneIndex, finished])
 
   useEffect(() => {
     if (!cloud) return
@@ -75,16 +79,16 @@ export default function App() {
   }, [save, userId])
 
   useEffect(() => {
-    if (mode !== 'auto' || page !== 'story' || finished) return
+    if (mode !== 'auto' || page !== 'story' || finished || !readyToChoose) return
     const timer = window.setTimeout(() => {
       if (revealed === null) choose(scene.autoChoice)
       else advance()
     }, 4200)
     return () => window.clearTimeout(timer)
-  }, [mode, page, save.sceneIndex, revealed, finished])
+  }, [mode, page, save.sceneIndex, revealed, finished, readyToChoose])
 
   function choose(choiceIndex: number) {
-    if (revealed !== null || finished) return
+    if (revealed !== null || finished || !readyToChoose) return
     const choice = scene.choices[choiceIndex]
     if (!choice) return
     setSave(current => {
@@ -184,12 +188,12 @@ export default function App() {
       {page === 'story' && <>
         <div className="story-head"><button className="back-link" onClick={() => setPage('universe')}><ArrowLeft size={17} /> Về vũ trụ</button><span className="story-head-right">MÙA CỦA THẢO · {finished ? 'HỒI KẾT' : scene.day.toUpperCase()}</span></div>
         <div className="chapter-layout">
-          <div className="chapter-art"><div className="chapter-art-glow" /><img className="chapter-world" src="/assets/thao-world.png" alt="Thế giới đất nặn của Thảo" /><img className="chapter-prot" src="/assets/prot-clay.png" alt="Prot" /><div className="chapter-stamp"><span>✦</span> {finished ? 'MỘT MÙA ĐÃ QUA' : scene.place}</div></div>
+          <div className="chapter-art"><div className="chapter-art-glow" /><img className="chapter-world" src="/assets/thao-world.png" alt="Thế giới đất nặn của Thảo" /><img className="chapter-prot" src="/assets/prot-clay.png" alt="Prot" /><div className="chapter-stamp"><span>✦</span> {finished ? 'MỘT MÙA ĐÃ QUA' : scene.place}</div>{!finished && revealed === null && <><div className="fragment-count">{found.length}/3 mảnh ký ức</div>{scene.fragments.map((fragment, index) => !found.includes(index) && <button className={`memory-fragment fragment-${index}`} key={fragment} onClick={() => setFound(current => current.includes(index) ? current : [...current, index])} aria-label={`Nhặt ${fragment}`}><span>{['✦', '✿', '✧'][index]}</span><small>{fragment}</small></button>)}</>}</div>
           <div className="chapter-page">
             <div className="page-topline"><BookHeart size={17} /> {finished ? 'TRANG CUỐI' : `${scene.day.toUpperCase()} · ${scene.weather.toUpperCase()}`}</div>
             {finished ? <><h1>{getEnding(save).title}</h1><div className="chapter-rule" /><p className="narration">{getEnding(save).text}</p><p className="task-note">Mỗi mùa truyện có thể đi theo một cách khác khi Prot lựa chọn khác đi.</p><div className="ending-actions"><button className="primary-button" onClick={() => setPage('journal')}>Xem nhật ký <ArrowRight size={18} /></button><button className="subtle-button" onClick={resetSeason}><RotateCcw size={16} /> Chơi lại mùa này</button></div></> : <>
               <h1>{scene.title}</h1><div className="chapter-rule" /><p className="narration">{scene.narration}</p><div className="task-note"><span>✧</span> {scene.task}</div>
-              {revealed === null ? <div className="choices" aria-label="Các lựa chọn của Prot">{scene.choices.map((choice, index) => <button key={choice.label} className="choice-card" onClick={() => choose(index)}><span className="choice-icon">{index + 1}</span><span><strong>{choice.label}</strong><small>{choice.detail}</small></span><ChevronRight size={17} /></button>)}</div> : <div className="reflection"><div className="reflection-label">✦ KHOẢNH KHẮC CÒN LẠI</div><p>{scene.choices[revealed].thought}</p><button className="primary-button" onClick={advance}>{save.sceneIndex === scenes.length - 1 ? 'Xem hồi kết' : 'Sang ngày tiếp theo'} <ArrowRight size={18} /></button></div>}
+              {revealed === null ? <>{!readyToChoose && <div className="fragment-instruction"><Sparkles size={16} /><span>Chạm nhặt ba mảnh ký ức trên thế giới đất nặn để mở lựa chọn.</span><button onClick={() => setFound([0, 1, 2])}>Bỏ qua</button></div>}<div className={`choices ${!readyToChoose ? 'not-ready' : ''}`} aria-label="Các lựa chọn của Prot">{scene.choices.map((choice, index) => <button key={choice.label} className="choice-card" disabled={!readyToChoose} onClick={() => choose(index)}><span className="choice-icon">{index + 1}</span><span><strong>{choice.label}</strong><small>{choice.detail}</small></span><ChevronRight size={17} /></button>)}</div></> : <div className="reflection"><div className="reflection-label">✦ KHOẢNH KHẮC CÒN LẠI</div><p>{scene.choices[revealed].thought}</p><button className="primary-button" onClick={advance}>{save.sceneIndex === scenes.length - 1 ? 'Xem hồi kết' : 'Sang ngày tiếp theo'} <ArrowRight size={18} /></button></div>}
             </>}
             <div className="chapter-footer"><span>{mode === 'auto' ? <><Play size={14} /> Prot tự chọn sau vài giây</> : <><Pause size={14} /> Mày chọn từng khoảnh khắc</>}</span><button onClick={() => setMode(mode === 'auto' ? 'manual' : 'auto')}>{mode === 'auto' ? 'Dừng tự động' : 'Chuyển tự động'}</button></div>
           </div>
