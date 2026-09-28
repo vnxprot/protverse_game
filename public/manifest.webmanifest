@@ -1,0 +1,12 @@
+{
+  "name": "ProtVerse — Vũ trụ tình yêu của Prot",
+  "short_name": "ProtVerse",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#100d26",
+  "theme_color": "#100d26",
+  "lang": "vi",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
