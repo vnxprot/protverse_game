@@ -1,4 +1,4 @@
-const CACHE = 'protverse-v2'
+const CACHE = 'protverse-v3'
 const CORE = ['/', '/icon.svg', '/assets/prot-clay.png', '/assets/thao-world.png']
 
 self.addEventListener('install', event => {
@@ -11,9 +11,6 @@ self.addEventListener('activate', event => {
     const keys = await caches.keys()
     await Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))
     await self.clients.claim()
-    // Replace pages that may still be using HTML cached by the previous release.
-    const clients = await self.clients.matchAll({ type: 'window' })
-    await Promise.all(clients.map(client => client.navigate(client.url).catch(() => {})))
   })())
 })
 
